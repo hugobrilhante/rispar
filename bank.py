@@ -1,4 +1,5 @@
 from decimal import Decimal
+from typing import List
 
 
 class Account:
@@ -22,4 +23,38 @@ class Transaction:
         self.value: Decimal = Decimal(value)
 
 
+class Bank:
 
+    def __init__(self):
+        self.accounts: dict = {}
+        self.transactions: dict = {}
+
+    def calculate_balances(self) -> None:
+        for account_number, account in self.accounts.items():
+            transactions = self.get_transactions(account_number)
+            for transaction in transactions:
+                if transaction.value > 0:
+                    account.deposit(transaction.value)
+                else:
+                    account.debit(transaction.value)
+
+    def get_account(self, account_number: int) -> Account:
+        return self.accounts[account_number]
+
+    def get_balances(self) -> None:
+        for account in self.accounts.values():
+            print(account.account_number, account.balance, sep=',')
+
+    def get_transactions(self, account_number: int) -> List[Transaction]:
+        return self.transactions[account_number]
+
+    def register_account(self, account: Account) -> None:
+        self.accounts[account.account_number] = account
+
+    def register_transaction(self, transaction: Transaction) -> None:
+        try:
+            self.transactions[transaction.account_number]
+        except KeyError:
+            self.transactions[transaction.account_number] = [transaction]
+        else:
+            self.transactions[transaction.account_number].append(transaction)
