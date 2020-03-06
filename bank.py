@@ -1,3 +1,4 @@
+import csv
 from decimal import Decimal
 from typing import List
 
@@ -25,9 +26,19 @@ class Transaction:
 
 class Bank:
 
-    def __init__(self):
+    def __init__(self, account_file: str, transaction_file: str):
         self.accounts: dict = {}
         self.transactions: dict = {}
+
+        with open(account_file) as f:
+            accounts = csv.reader(f, delimiter=',')
+            for a, b in accounts:
+                self.register_account(Account(a, b))
+
+        with open(transaction_file) as f:
+            transactions = csv.reader(f, delimiter=',')
+            for a, v in transactions:
+                self.register_transaction(Transaction(a, v))
 
     def calculate_balances(self) -> None:
         for account_number, account in self.accounts.items():
