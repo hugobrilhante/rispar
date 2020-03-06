@@ -13,3 +13,13 @@ class Account:
 
     def debit(self, value: Decimal):
         self.balance += value - self.assessment
+
+
+class Transaction:
+
+    def __init__(self, account_number: int, value: int):
+        self.account_number: int = int(account_number)
+        self.value: Decimal = Decimal(value)
+
+
+
