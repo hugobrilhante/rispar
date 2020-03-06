@@ -4,6 +4,7 @@ from io import StringIO
 from unittest.mock import patch
 
 from bank import Account, Bank
+from rispatest import create_parser, main
 
 
 class BankTestCase(unittest.TestCase):
@@ -26,10 +27,21 @@ class BankTestCase(unittest.TestCase):
         self.bank.calculate_balances()
         self.assertEqual(self.bank.get_account(345).balance, Decimal(132423))
 
-    def test_get_balance(self) -> None:
+
+class ParseTestCase(unittest.TestCase):
+
+    def setUp(self) -> None:
+        self.parser = create_parser()
+
+    def test_with_empty_args(self) -> None:
+        with self.assertRaises(SystemExit):
+            self.parser.parse_args([])
+
+    def test_with_args(self) -> None:
         with patch('sys.stdout', new=StringIO()) as stdout:
-            self.bank.get_balances()
-            self.assertEqual(stdout.getvalue().strip(), '345,14428')
+            args = self.parser.parse_args(['--files', 'accounts.csv', 'transactions.csv'])
+            main(args)
+            self.assertEqual(stdout.getvalue().strip(), '345,132423')
 
 
 if __name__ == '__main__':
