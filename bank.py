@@ -4,7 +4,7 @@ from typing import List
 
 
 class Account:
-    assessment: Decimal = Decimal(5)
+    assessment: Decimal = Decimal(500)
 
     def __init__(self, account_number: int, balance: int):
         self.account_number: int = int(account_number)
@@ -14,7 +14,9 @@ class Account:
         self.balance += value
 
     def debit(self, value: Decimal):
-        self.balance += value - self.assessment
+        self.balance += value
+        if self.balance < 0:
+            self.balance -= self.assessment
 
 
 class Transaction:

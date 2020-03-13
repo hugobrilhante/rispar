@@ -25,7 +25,7 @@ class BankTestCase(unittest.TestCase):
 
     def test_calculate_transactions(self) -> None:
         self.bank.calculate_balances()
-        self.assertEqual(self.bank.get_account(345).balance, Decimal(132423))
+        self.assertEqual(self.bank.get_account(345).balance, Decimal(-2500))
 
 
 class ParseTestCase(unittest.TestCase):
@@ -41,7 +41,7 @@ class ParseTestCase(unittest.TestCase):
         with patch('sys.stdout', new=StringIO()) as stdout:
             args = self.parser.parse_args(['--files', 'accounts.csv', 'transactions.csv'])
             main(args)
-            self.assertEqual(stdout.getvalue().strip(), '345,132423')
+            self.assertEqual(stdout.getvalue().strip(), '345,-2500')
 
 
 if __name__ == '__main__':
